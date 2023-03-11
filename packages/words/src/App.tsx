@@ -1,6 +1,8 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { createUseStyles } from "react-jss";
-import { Button, Colors, FontWeight } from "words-ui";
+import type { Word } from "words-ui";
+import { Button, CardList, Colors, FontWeight, useLocalStorage } from "words-ui";
+import { WordsContext } from "words-ui/src/context/WordsContext";
 
 const useStyles = createUseStyles({
   text: { color: Colors.info, fontWeight: FontWeight.bold },
@@ -9,13 +11,18 @@ const useStyles = createUseStyles({
 const App = () => {
   const classes = useStyles();
   const [count, setCount] = useState(0);
-  const onClick = useCallback(() => setCount(count + 1), [count]);
+  const [words, setWords] = useLocalStorage<Word[]>("WORDS", []);
+
+  const onClick = () => {
+    console.log(words);
+  };
 
   return (
-    <>
+    <WordsContext.Provider value={words}>
       <p className={classes.text}>You clicked {count} times</p>
       <Button onClick={onClick} text="Click on me" />
-    </>
+      <CardList words={words} />
+    </WordsContext.Provider>
   );
 };
 
