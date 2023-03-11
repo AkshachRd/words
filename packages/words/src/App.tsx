@@ -8,14 +8,13 @@ const useStyles = createUseStyles({
 
 const App = () => {
   const classes = useStyles();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [count, setCount] = useState(0);
   const [words, setWords] = useLocalStorage<Word[]>("WORDS", []);
 
   const onClick = useCallback(() => {
-    // eslint-disable-next-line functional/no-expression-statements
     setWords([{ backSide: "word", frontSide: "word", id: "1" }]);
-  }, [setWords]);
+    setCount(count + 1);
+  }, [setWords, setCount, count]);
 
   return (
     <WordsContext.Provider value={words}>
