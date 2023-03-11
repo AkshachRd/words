@@ -17,6 +17,7 @@ module.exports = defineConfig({
   rules: {
     "functional/functional-parameters": "off",
     "functional/no-conditional-statements": "off",
+    "functional/no-expression-statements": ["warn", { ignoreVoid: true }],
     "functional/no-return-void": "off",
     "functional/prefer-immutable-types": "off",
     "functional/type-declaration-immutability": "off",

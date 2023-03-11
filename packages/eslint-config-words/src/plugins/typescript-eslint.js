@@ -11,7 +11,7 @@ module.exports = defineConfig({
     },
     {
       // See https://github.com/typescript-eslint/typescript-eslint/issues/2607 for more information.
-      files: ["*.tsx"],
+      files: ["*.tsx", "**/context/**.ts"],
       rules: {
         "@typescript-eslint/naming-convention": [
           "error",
@@ -53,7 +53,7 @@ module.exports = defineConfig({
           },
           PropsWithChildren: {
             fixWith: "ChildrenProps",
-            message: 'Prefer Reactor library "ChildrenProps" type over React "PropsWithChildren" type',
+            message: 'Prefer Words UI library "ChildrenProps" type over React "PropsWithChildren" type',
           },
           "React.FC":
             "Prefer regular function. See https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/function_components/",
