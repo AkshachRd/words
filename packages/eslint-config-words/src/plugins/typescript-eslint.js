@@ -64,6 +64,7 @@ module.exports = defineConfig({
         },
       },
     ],
+    "@typescript-eslint/consistent-type-definitions": ["warn", "type"],
     "@typescript-eslint/consistent-type-imports": [
       "error",
       { fixStyle: "inline-type-imports", prefer: "type-imports" },
