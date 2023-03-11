@@ -4,3 +4,4 @@ packages/**/assets
 .yarn
 .coverage
 .jscpd
+README.md

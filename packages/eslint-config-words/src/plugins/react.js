@@ -15,7 +15,9 @@ module.exports = defineConfig({
     "react/jsx-no-literals": "off",
     "react/jsx-props-no-spreading": "off",
     "react/no-children-prop": "off",
+    "react/no-unused-prop-types": "off",
     "react/prop-types": "off",
+    "react/require-default-props": "off",
   },
   settings: {
     react: {

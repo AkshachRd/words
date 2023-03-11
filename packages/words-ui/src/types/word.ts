@@ -1,5 +1,5 @@
 export type Word = {
-    id: string;
-    backSide: string;
-    frontSide: string;
+  backSide: string;
+  frontSide: string;
+  id: string;
 };

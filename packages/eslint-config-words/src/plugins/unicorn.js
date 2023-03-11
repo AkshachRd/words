@@ -19,6 +19,12 @@ module.exports = defineConfig({
         "unicorn/filename-case": ["error", { case: "kebabCase" }],
       },
     },
+    {
+      files: ["**/hooks/**.ts"],
+      rules: {
+        "unicorn/filename-case": ["error", { case: "camelCase" }],
+      },
+    },
   ],
   rules: {
     "unicorn/filename-case": ["error", { case: "pascalCase" }],

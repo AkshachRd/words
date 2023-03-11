@@ -49,22 +49,22 @@ module.exports = defineConfig({
         types: {
           "JSX.Element": {
             fixWith: "ReactElement",
-            message: 'Prefer React "ReactElement" type over "JSX.Element" type',
+            message: 'Prefer React "ReactNode" or "ReactElement"  type over "JSX.Element" type',
           },
-          /*
-           * PropsWithChildren: {
-           *   fixWith: "ChildrenProps",
-           *   message: 'Prefer Reactor library "ChildrenProps" type over React "PropsWithChildren" type',
-           * },
-           */
+          PropsWithChildren: {
+            fixWith: "ChildrenProps",
+            message: 'Prefer Reactor library "ChildrenProps" type over React "PropsWithChildren" type',
+          },
           "React.FC":
-            'Do not use "React.FC type", prefer regular function. See https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/function_components/',
+            "Prefer regular function. See https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/function_components/",
           "React.FunctionComponent":
-            'Do not use "React.FunctionComponent" type, prefer regular function. See https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/function_components/',
+            "Prefer regular function. See https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/function_components/",
+          Readonly:
+            "We decided not to enforce immutable types and hope that TypeScript language immutability by default will be shipped some day: https://github.com/microsoft/TypeScript/issues/32758",
         },
       },
     ],
-    "@typescript-eslint/consistent-type-definitions": ["warn", "type"],
+    "@typescript-eslint/consistent-type-definitions": ["error", "type"],
     "@typescript-eslint/consistent-type-imports": [
       "error",
       { fixStyle: "inline-type-imports", prefer: "type-imports" },
@@ -250,7 +250,7 @@ module.exports = defineConfig({
       },
     ],
     "@typescript-eslint/no-confusing-void-expression": "off",
-    "@typescript-eslint/no-magic-numbers": ["error", { ignore: [0, 1, 2] }],
+    "@typescript-eslint/no-magic-numbers": ["error", { ignore: [0, 1, 2, 4, 8, 16, 24, 32] }],
     "@typescript-eslint/no-type-alias": "off",
     "@typescript-eslint/prefer-readonly-parameter-types": "off",
     "@typescript-eslint/require-array-sort-compare": ["error", { ignoreStringArrays: true }],
