@@ -1,1 +1,1 @@
-export * from "./word";
+export * from "./Word";

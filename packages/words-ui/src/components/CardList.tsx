@@ -1,21 +1,19 @@
-import Card from "words-ui/src/components/Card";
-import type { Word } from "words-ui/src/types/word";
+import type { Word } from "../types/Word";
+import { Card } from "./Card";
 
 type CardListProps = {
-    words: Word[];
+  words: Word[];
 };
 
-export const CardList = ({words}: CardListProps) => (
-        <>
-            {words.map((word) => (
-                <Card key={word.id}>
-                <p>{word.frontSide}</p>
-                <br />
-                <p>{word.backSide}</p>
-                </Card>
-            ))}
-            <Card>
-                +
-            </Card>
-        </>
-    );
+export const CardList = ({ words }: CardListProps) => (
+  <>
+    {words.map(word => (
+      <Card key={word.id}>
+        <p>{word.frontSide}</p>
+        <br />
+        <p>{word.backSide}</p>
+      </Card>
+    ))}
+    <Card>+</Card>
+  </>
+);

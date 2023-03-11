@@ -1,4 +1,11 @@
 {
   "extends": "../../tsconfig/browser",
-  "include": ["src", "../words-ui/src/components/Card.tsx", "../words-ui/src/hooks", "../words-ui/src/types", "../words-ui/src/context", "../words-ui/src/components/CardEditor.tsx"]
+  "include": [
+    "src",
+    "../words-ui/src/components/Card.tsx",
+    "../words-ui/src/hooks",
+    "../words-ui/src/types",
+    "../words-ui/src/context",
+    "../words-ui/src/components/CardEditor.tsx"
+  ]
 }
