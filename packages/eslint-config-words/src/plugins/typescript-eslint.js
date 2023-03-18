@@ -11,7 +11,7 @@ module.exports = defineConfig({
     },
     {
       // See https://github.com/typescript-eslint/typescript-eslint/issues/2607 for more information.
-      files: ["*.tsx", "**/context/**.ts"],
+      files: ["*.tsx", "**/context/**/*.ts"],
       rules: {
         "@typescript-eslint/naming-convention": [
           "error",

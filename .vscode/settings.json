@@ -4,6 +4,9 @@
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": ["source.organizeImports", "source.fixAll"], // See https://github.com/microsoft/vscode/pull/92681
   "editor.rulers": [120],
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
   // errorLens
   "errorLens.gutterIconsEnabled": true,
   "errorLens.statusBarIconsEnabled": true,
