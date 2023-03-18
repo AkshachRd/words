@@ -1,6 +1,5 @@
-import { useContext } from "react";
 import { createUseStyles } from "react-jss";
-import { StoreContext } from "../../../words/src/context";
+import { useSelectStore } from "../../../words/src/context";
 import { shuffleArray } from "../services";
 import { getRandomNumber } from "../services/GetRandomNumber";
 import { FlipCard } from "./FlipCard";
@@ -20,7 +19,7 @@ const useStyles = createUseStyles<RuleNames>({
 });
 
 export const CardTrainer = () => {
-  const [{words}, dispatch] = useContext(StoreContext);
+  const [{words}, _] = useSelectStore();
   const classes = useStyles();
   const shuffledWords = shuffleArray(words);
   const firstWord = shuffledWords[0];

@@ -1,6 +1,6 @@
-import { useCallback, useContext } from "react";
+import { useCallback } from "react";
 import { createUseStyles } from "react-jss";
-import { StoreContext } from "../../../words/src/context";
+import { useSelectStore } from "../../../words/src/context";
 import { makeId } from "../../../words/src/services/MakeId";
 import { addCardAction } from "../../../words/src/services/Store";
 import AddCard from "./AddCard";
@@ -18,7 +18,7 @@ const useStyles = createUseStyles<RuleNames>({
 
 export const CardList = () => {
   const classes = useStyles();
-  const [state, dispatch] = useContext(StoreContext);
+  const [state, dispatch] = useSelectStore();
 
   const addCard = useCallback(() => {
     dispatch(addCardAction({id: makeId(5), frontSide: "Hello", backSide: "Привет"}))
