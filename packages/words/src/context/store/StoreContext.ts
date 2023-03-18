@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { Functions } from "words-ui";
+import * as Functions from "../../services/Functions";
 import type { Store } from "../../services/Store";
 
 const initialValue: Store = [{ page: "CARD_LIST", words: [] }, Functions.empty];
