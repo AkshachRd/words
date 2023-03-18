@@ -15,25 +15,25 @@ export type Action = {
   type: ActionKind;
 };
 
-export const addCardAction = (payload: Word): Action => ({
+export type State = {
+  page: Pages;
+  words: Word[];
+};
+
+const addCardAction = (payload: Word): Action => ({
   payload,
   type: ActionKind.AddCard,
 });
 
-export const deleteCardAction = (payload: Id): Action => ({
+const deleteCardAction = (payload: Id): Action => ({
   payload,
   type: ActionKind.DeleteCard,
 });
 
-export const setPageAction = (payload: Pages): Action => ({
+const setPageAction = (payload: Pages): Action => ({
   payload,
   type: ActionKind.SetPage,
 });
-
-type State = {
-  page: Pages;
-  words: Word[];
-};
 
 const reducer = (state: State, action: Action): State => {
   const {type, payload} = action;
@@ -61,6 +61,19 @@ const reducer = (state: State, action: Action): State => {
       return state
     }
   }
+};
+
+
+
+
+
+export type Store = ReturnType<typeof useStore>;
+
+
+export {
+  addCardAction,
+  deleteCardAction,
+  setPageAction
 };
 
 export const useStore = (initialState: State) => useReducer(reducer, initialState);

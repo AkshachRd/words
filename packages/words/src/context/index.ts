@@ -1,1 +1,1 @@
-export * from "./WordsContext";
+export * from "./store";
