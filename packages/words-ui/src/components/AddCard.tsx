@@ -1,11 +1,12 @@
-import { useCallback, useContext } from "react";
+import { memo } from "react";
 import { createUseStyles } from "react-jss";
-import { WordsContext } from "../../../words/src/context";
-import { makeId } from "../../../words/src/services/MakeId";
-import { addCardAction } from "../../../words/src/services/Store";
 import { Card } from "./Card";
 
 type RuleNames = "addCard";
+
+type AddCardProps = {
+  onClick: () => void;
+};
 
 const useStyles = createUseStyles<RuleNames>({
   addCard: {
@@ -16,13 +17,8 @@ const useStyles = createUseStyles<RuleNames>({
   }
 });
 
-export const AddCard = () => {
+const AddCard = ({onClick}: AddCardProps) => {
   const classes = useStyles();
-  const [_, dispatch] = useContext(WordsContext);
-
-  const onClick = useCallback(() => {
-    dispatch(addCardAction({id: makeId(5), frontSide: "Hello", backSide: "Привет"}))
-  }, [dispatch]);
 
   return (
     <div className={classes.addCard} onClick={onClick}>
@@ -32,3 +28,5 @@ export const AddCard = () => {
     </div>
   )
 };
+
+export default memo(AddCard);
