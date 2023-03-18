@@ -1,19 +1,29 @@
-import type { Word } from "../types/Word";
-import { Card } from "./Card";
+import { useContext } from "react";
+import { createUseStyles } from "react-jss";
+import { WordsContext } from "../../../words/src/context";
+import { AddCard } from "./AddCard";
+import { FlipCard } from "./FlipCard";
 
-type CardListProps = {
-  words: Word[];
-};
+type RuleNames = "cardList";
 
-export const CardList = ({ words }: CardListProps) => (
-  <>
-    {words.map(word => (
-      <Card key={word.id}>
-        <p>{word.frontSide}</p>
-        <br />
-        <p>{word.backSide}</p>
-      </Card>
+const useStyles = createUseStyles<RuleNames>({
+  cardList: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 20
+  }
+});
+
+export const CardList = () => {
+  const classes = useStyles();
+  const [state, _] = useContext(WordsContext);
+
+  return (
+    <div className={classes.cardList}>
+    {state.words.map((word) => (
+      <FlipCard key={word.id} word={word} />
     ))}
-    <Card>+</Card>
-  </>
-);
+    <AddCard />
+  </div>
+  );
+};

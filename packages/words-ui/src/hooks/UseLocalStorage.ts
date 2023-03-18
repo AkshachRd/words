@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 export const useLocalStorage = <S>(key: string, initialValue: S): [S, (value: S | ((value: S) => S)) => void] => {
   const [storedValue, setStoredValue] = useState<S>(() => {
@@ -19,12 +19,10 @@ export const useLocalStorage = <S>(key: string, initialValue: S): [S, (value: S 
     }
   });
 
-  const setValue = (value: S | ((value: S) => S)): void => {
+  const setValue = useCallback((value: S | ((value: S) => S)): void => {
     // eslint-disable-next-line functional/no-try-statements
     try {
       const valueToStore = value instanceof Function ? value(storedValue) : value;
-      // eslint-disable-next-line no-console
-      console.log(valueToStore);
       setStoredValue(valueToStore);
       if (typeof window !== "undefined") {
         window.localStorage.setItem(key, JSON.stringify(valueToStore));
@@ -33,7 +31,7 @@ export const useLocalStorage = <S>(key: string, initialValue: S): [S, (value: S 
       // eslint-disable-next-line no-console
       console.error(error);
     }
-  };
+  }, [storedValue, key]);
 
   return [storedValue, setValue];
 };
