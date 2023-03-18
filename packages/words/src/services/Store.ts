@@ -2,15 +2,18 @@ import { useReducer } from "react";
 import { isWord, type Id, type Word } from "words-ui";
 import { isPage, type Pages } from "../types/Pages";
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 const ActionKind = {
   AddCard: "ADD_CARD",
   DeleteCard: "DELETE_CARD",
   SetPage: "SET_PAGE",
 } as const;
-type ActionKind = typeof ActionKind[keyof typeof ActionKind];
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+type ActionKind = (typeof ActionKind)[keyof typeof ActionKind];
+// eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
 type PayloadKind = Id | Pages | Word;
 
-export type Action = {
+type Action = {
   payload: PayloadKind;
   type: ActionKind;
 };
@@ -36,7 +39,7 @@ const setPageAction = (payload: Pages): Action => ({
 });
 
 const reducer = (state: State, action: Action): State => {
-  const {type, payload} = action;
+  const { type, payload } = action;
 
   switch (type) {
     case ActionKind.AddCard: {
@@ -46,7 +49,7 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         words: [...state.words, payload],
-      }
+      };
     }
     case ActionKind.SetPage: {
       if (!isPage(payload)) {
@@ -54,26 +57,17 @@ const reducer = (state: State, action: Action): State => {
       }
       return {
         ...state,
-        page: payload
-      }
+        page: payload,
+      };
     }
     default: {
-      return state
+      return state;
     }
   }
 };
 
-
-
-
-
 export type Store = ReturnType<typeof useStore>;
 
-
-export {
-  addCardAction,
-  deleteCardAction,
-  setPageAction
-};
+export { addCardAction, deleteCardAction, setPageAction };
 
 export const useStore = (initialState: State) => useReducer(reducer, initialState);

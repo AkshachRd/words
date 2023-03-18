@@ -4,6 +4,10 @@ export type Word = {
   id: string;
 };
 
-export const isWord = (word: Word | any): word is Word => (
-  word.id !== undefined && word.frontSide !== undefined && word.backSide !== undefined
-);
+export const isWord = (word: unknown): word is Word =>
+  word !== null &&
+  typeof word === "object" &&
+  "id" in word &&
+  "frontSide" in word &&
+  "backSide" in word &&
+  typeof word.id === "string";
