@@ -23,8 +23,8 @@ const useStyles = createUseStyles<RuleNames, Rotation>({
     perspective: 1000,
     width: 500,
   },
-  flipCardBack: (rotated) => ({
-    "WebkitBackfaceVisibility": "hidden",
+  flipCardBack: rotated => ({
+    WebkitBackfaceVisibility: "hidden",
     backfaceVisibility: "hidden",
     height: "100%",
     left: 0,
@@ -42,8 +42,8 @@ const useStyles = createUseStyles<RuleNames, Rotation>({
     transition: ".5s",
     width: "100%",
   },
-  flipCardFront: (rotated) => ({
-    "WebkitBackfaceVisibility": "hidden",
+  flipCardFront: rotated => ({
+    WebkitBackfaceVisibility: "hidden",
     backfaceVisibility: "hidden",
     height: "100%",
     left: 0,
@@ -55,27 +55,23 @@ const useStyles = createUseStyles<RuleNames, Rotation>({
   }),
 });
 
-export const FlipCard = ({word, onDelete, onEdit, opacity, rotation, disabled}: FlipCardProps) => {
+export const FlipCard = ({ word, onDelete, onEdit, opacity, rotation, disabled }: FlipCardProps) => {
   const [isRotated, setIsRotated] = useState(false);
   const classes = useStyles(isRotated);
-  const onClick = useCallback(() => setIsRotated((state) => !state) ,[setIsRotated]);
+  const onClick = useCallback(() => setIsRotated(state => !state), [setIsRotated]);
 
   return (
-    <div className={classes.flipCard} onClick={disabled ? undefined : onClick}>
+    <div className={classes.flipCard} onClick={disabled === undefined || disabled ? undefined : onClick}>
       <div className={classes.flipCardContainer}>
-        <div
-          className={classes.flipCardFront}
-        >
+        <div className={classes.flipCardFront}>
           <Card opacity={opacity} rotation={rotation}>
             {word.frontSide}
           </Card>
         </div>
         <div className={classes.flipCardBack}>
-          <Card>
-            {word.backSide}
-          </Card>
+          <Card>{word.backSide}</Card>
         </div>
       </div>
     </div>
-  )
+  );
 };
