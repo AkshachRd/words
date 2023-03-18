@@ -1,26 +1,35 @@
-import { useCallback, useState } from "react";
-import { createUseStyles } from "react-jss";
-import { Button, CardList, Colors, FontWeight, useLocalStorage, WordsContext, type Word } from "words-ui";
-
-const useStyles = createUseStyles({
-  text: { color: Colors.info, fontWeight: FontWeight.bold },
-});
+import { useCallback, useEffect, useMemo } from "react";
+import { Button, CardList, CardTrainer, useLocalStorage, type Word } from "words-ui";
+import { WordsContext } from "./context";
+import { setPageAction, useStore } from "./services/Store";
+import { Pages } from "./types/Pages";
 
 const App = () => {
-  const classes = useStyles();
-  const [count, setCount] = useState(0);
-  const [words, setWords] = useLocalStorage<Word[]>("WORDS", []);
+  const [words, setWordsToLocalStorage] = useLocalStorage<Word[]>("WORDS", []);
+  const [state, dispatchToStore] = useStore({page: "CARD_LIST", words});
 
-  const onClick = useCallback(() => {
-    setWords([{ backSide: "word", frontSide: "word", id: "1" }]);
-    setCount(count + 1);
-  }, [setWords, setCount, count]);
+  const onClickCardList = useCallback(() => {
+    dispatchToStore(setPageAction(Pages.CardList));
+  }, [dispatchToStore]);
+
+  const onClickCardTrainer = useCallback(() => {
+    dispatchToStore(setPageAction(Pages.CardTrainer));
+  }, [dispatchToStore]);
+
+  useEffect(() => {
+    setWordsToLocalStorage(state.words);
+  }, [state.words]);
+
+  const contextValue = useMemo<ReturnType<typeof useStore>>(() => (
+    [{...state, words: [...state.words]}, dispatchToStore]
+  ), [state, dispatchToStore]);
 
   return (
-    <WordsContext.Provider value={words}>
-      <p className={classes.text}>You clicked {count} times</p>
-      <Button onClick={onClick} text="Click on me" />
-      <CardList words={words} />
+    <WordsContext.Provider value={contextValue}>
+      <Button onClick={onClickCardList} text="Card list" />
+      <Button onClick={onClickCardTrainer} text="Card trainer" />
+      {state.page === Pages.CardList && <CardList />}
+      {state.page === Pages.CardTrainer && <CardTrainer/>}
     </WordsContext.Provider>
   );
 };
