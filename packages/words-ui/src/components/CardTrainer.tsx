@@ -6,36 +6,43 @@ import { FlipCard } from "./FlipCard";
 
 type RuleNames = "cardTrainer" | "cardTrainerElement";
 
+const centerShift = 50;
+const shuffleShift = 5;
+const rotationRange = 20;
+const backgroundCardOpacity = 0.5;
+
 const useStyles = createUseStyles<RuleNames>({
   cardTrainer: {
     position: "relative",
   },
   cardTrainerElement: {
-    left: "50%",
+    left: `${centerShift}%`,
     position: "absolute",
-    top: "50%",
+    top: `${centerShift}%`,
     transform: "translate(-50%, 50%)",
   }
 });
 
 export const CardTrainer = () => {
-  const [{words}, _] = useSelectStore();
+  const [{words}] = useSelectStore();
   const classes = useStyles();
-  const shuffledWords = shuffleArray(words);
-  const firstWord = shuffledWords[0];
-  const backgroundWords = shuffledWords.slice(1, words.length)
+  const [firstWord, ...backgroundWords] = shuffleArray(words);
 
   return (
     <div className={classes.cardTrainer}>
       {backgroundWords.map((word) => {
         const styles = {
-          left: `${50 + getRandomNumber(-5, 5, 0)}%`,
-          top: `${50 + getRandomNumber(-5, 5, 0)}%`,
+          left: `${centerShift + getRandomNumber(-shuffleShift, shuffleShift, 0)}%`,
+          top: `${centerShift + getRandomNumber(-shuffleShift, shuffleShift, 0)}%`,
         };
 
         return (
           <div className={classes.cardTrainerElement} key={word.id} style={styles}>
-            <FlipCard disabled opacity={0.5} rotation={getRandomNumber(-20, 20, 0)} word={word} />
+            <FlipCard disabled
+              opacity={backgroundCardOpacity}
+              rotation={getRandomNumber(-rotationRange, rotationRange, 0)}
+              word={word}
+            />
           </div>
         )
       })}

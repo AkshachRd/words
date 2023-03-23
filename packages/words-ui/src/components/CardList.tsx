@@ -1,9 +1,11 @@
-import { useCallback } from "react";
+import { useState } from "react";
 import { createUseStyles } from "react-jss";
+import { v4 as uuidV4 } from "uuid";
 import { useSelectStore } from "../../../words/src/context";
-import { makeId } from "../../../words/src/services/MakeId";
-import { addCardAction } from "../../../words/src/services/Store";
+import { addCardAction, deleteCardAction, editCardAction } from "../../../words/src/services/Store";
+import { getDefaultCard, type Id, type Word } from "../types";
 import AddCard from "./AddCard";
+import { CardEditor } from "./CardEditor";
 import { FlipCard } from "./FlipCard";
 
 type RuleNames = "cardList";
@@ -19,15 +21,34 @@ const useStyles = createUseStyles<RuleNames>({
 export const CardList = () => {
   const classes = useStyles();
   const [state, dispatch] = useSelectStore();
+  // TODO null
+  const [editingCardId, setEditingCardId] = useState<Id | null>(null);
 
-  const addCard = useCallback(() => {
-    dispatch(addCardAction({id: makeId(5), frontSide: "Hello", backSide: "Привет"}))
-  }, [dispatch]);
+  const addCard = () => {
+    dispatch(addCardAction(getDefaultCard(uuidV4())));
+  };
+
+  const handleSubmit = (editedWord: Word) => dispatch(editCardAction(editedWord));
+  const handleDelete = (wordId: Id) => () => dispatch(deleteCardAction(wordId));
 
   return (
     <div className={classes.cardList}>
     {state.words.map((word) => (
-      <FlipCard key={word.id} word={word} />
+      editingCardId === word.id
+      ?
+      <CardEditor
+        key={word.id}
+        onCancel={() => setEditingCardId(null)}
+        onSubmit={handleSubmit}
+        word={word}
+      />
+      :
+      <FlipCard
+        key={word.id}
+        onDelete={handleDelete(word.id)}
+        onEdit={() => setEditingCardId(word.id)}
+        word={word}
+      />
     ))}
     <AddCard onClick={addCard} />
   </div>
