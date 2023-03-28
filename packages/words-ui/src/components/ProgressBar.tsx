@@ -15,6 +15,7 @@ const useStyles = createUseStyles<RuleNames, ProgressBarProps>({
   progressBarFiller: ({completed}) => ({
     backgroundColor: "#36c93c",
     height: "100%",
+    transition: "width 1s ease-out",
     width: `${completed}%`,
   }),
   progressBarLabel: {
