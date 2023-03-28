@@ -3,7 +3,7 @@ import { createUseStyles } from "react-jss";
 import type { Word } from "../types";
 import { Card } from "./Card";
 
-type RuleNames = "flipCard" | "flipCardBack" | "flipCardButton" | "flipCardContainer" | "flipCardFront";
+type RuleNames = "flipCard" | "flipCardBack" | "flipCardButton" | "flipCardButtonsContainer" | "flipCardContainer" | "flipCardFront";
 
 type FlipCardProps = {
   disabled?: boolean;
@@ -37,11 +37,27 @@ const useStyles = createUseStyles<RuleNames>({
     width: "100%",
   },
   flipCardButton: {
-    display: "none",
+    appearance: "none",
+    backgroundColor: "white",
+    border: "1px solid black",
+    borderRadius: 40,
+    cursor: "pointer",
+    left: "5%",
     position: "absolute",
+    top: "5%",
+  },
+  flipCardButtonsContainer: {
+    "& :nth-child(even)": {
+      left: "95%",
+      transform: "translateX(-100%)",
+    },
+    display: "none",
+    height: "100%",
+    position: "relative",
+    width: "100%",
   },
   flipCardContainer: {
-    "&:hover $flipCardButton": {
+    "&:hover $flipCardButtonsContainer": {
       display: "block",
     },
     height: "100%",
@@ -52,8 +68,8 @@ const useStyles = createUseStyles<RuleNames>({
     width: "100%",
   },
   flipCardFront: {
-    WebkitBackfaceVisibility: "hidden",
     backfaceVisibility: "hidden",
+    WebkitBackfaceVisibility: "hidden", // TODO CSS logic
     height: "100%",
     left: 0,
     position: "absolute",
@@ -88,12 +104,15 @@ export const FlipCard = ({ word, onDelete, onEdit, opacity, rotation, disabled }
         <div className={classes.flipCardBack} style={flipCardBackStyles}>
           <Card>{word.backSide}</Card>
         </div>
-        {onDelete && (disabled === undefined || !disabled) ?
-        <button className={classes.flipCardButton} onClick={onDelete} type="button">Delete</button>
-        : undefined}
-        {onEdit && (disabled === undefined || !disabled) ?
-        <button className={classes.flipCardButton} onClick={onEdit} style={{top: "20px"}} type="button">Edit</button>
-        : undefined}
+        {(disabled === undefined || !disabled) ?
+          <div className={classes.flipCardButtonsContainer}>
+            {onDelete ?
+            <button className={classes.flipCardButton} onClick={onDelete} type="button">Delete</button>
+            : undefined}
+            {onEdit ?
+            <button className={classes.flipCardButton} onClick={onEdit} type="button">Edit</button>
+            : undefined}
+          </div> : undefined}
       </div>
     </div>
   );

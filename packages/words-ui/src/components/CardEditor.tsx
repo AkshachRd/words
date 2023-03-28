@@ -3,19 +3,24 @@ import { createUseStyles } from "react-jss";
 import type { Word } from "../types";
 import { Card } from "./Card";
 
-type RuleNames = "cardEditor" |
-                 "cardEditorButton" |
-                 "cardEditorButtonsContainer" |
-                 "cardEditorContainer" |
-                 "cardEditorInput";
-
 type CardEditorProps = {
   onCancel: () => void;
   onSubmit: (word: Word) => void;
   word: Word;
 };
 
-const useStyles = createUseStyles<RuleNames>({
+// TODO RuleNames
+const useStyles = createUseStyles({
+  "@keyframes borderSlide": {
+    from: {
+      border: "0 solid black",
+      padding: 0,
+    },
+    to: {
+      border: "10px solid black",
+      padding: 20,
+    }
+  },
   cardEditor: {
     display: "flex",
     flexDirection: "column",
@@ -33,6 +38,7 @@ const useStyles = createUseStyles<RuleNames>({
     flexDirection: "row",
   },
   cardEditorContainer: {
+    animation: ".3s ease-out 0s 1 $borderSlide",
     border: "10px solid black",
     borderRadius: 40,
     display: "flex",
@@ -53,7 +59,7 @@ const useStyles = createUseStyles<RuleNames>({
     color: "inherit",
     fontSize: "inherit",
     textAlign: "center",
-  }
+  },
 });
 
 export const CardEditor = ({word, onCancel, onSubmit}: CardEditorProps) => {
@@ -78,12 +84,24 @@ export const CardEditor = ({word, onCancel, onSubmit}: CardEditorProps) => {
       <div className={classes.cardEditorContainer}>
         <Card>
           <label>
-            <input className={classes.cardEditorInput} defaultValue={word.frontSide} name="frontSide" type="text" />
+            <input
+              className={classes.cardEditorInput}
+              defaultValue={word.frontSide}
+              name="frontSide"
+              placeholder="Front side"
+              type="text"
+            />
           </label>
         </Card>
         <Card>
-        <label>
-            <input className={classes.cardEditorInput} defaultValue={word.backSide} name="backSide" type="text" />
+          <label>
+            <input
+              className={classes.cardEditorInput}
+              defaultValue={word.backSide}
+              name="backSide"
+              placeholder="Back side"
+              type="text"
+            />
           </label>
         </Card>
       </div>

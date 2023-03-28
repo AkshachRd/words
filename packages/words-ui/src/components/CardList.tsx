@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { createUseStyles } from "react-jss";
-import { v4 as uuidV4 } from "uuid";
 import { useSelectStore } from "../../../words/src/context";
 import { addCardAction, deleteCardAction, editCardAction } from "../../../words/src/services/Store";
-import { getDefaultCard, type Id, type Word } from "../types";
+import type { Id, Word } from "../types";
 import AddCard from "./AddCard";
 import { CardEditor } from "./CardEditor";
 import { FlipCard } from "./FlipCard";
@@ -24,8 +23,8 @@ export const CardList = () => {
   // TODO null
   const [editingCardId, setEditingCardId] = useState<Id | null>(null);
 
-  const addCard = () => {
-    dispatch(addCardAction(getDefaultCard(uuidV4())));
+  const addCard = (word: Word) => {
+    dispatch(addCardAction(word));
   };
 
   const handleSubmit = (editedWord: Word) => dispatch(editCardAction(editedWord));

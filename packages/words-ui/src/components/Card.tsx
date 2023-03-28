@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { createUseStyles } from "react-jss";
+import { Colors } from "../theme";
 
 type RuleNames = "card";
 
@@ -12,7 +13,7 @@ type CardProps = {
 const useStyles = createUseStyles<RuleNames, CardProps>({
   card: ({ rotation, opacity }) => ({
     alignItems: "center",
-    backgroundColor: "#ffc002",
+    backgroundColor: Colors.cardBackground,
     borderRadius: 40,
     color: "white",
     display: "flex",

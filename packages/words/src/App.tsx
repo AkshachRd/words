@@ -1,12 +1,29 @@
 import { useCallback, useEffect } from "react";
-import { Button, CardList, CardTrainer, useLocalStorage, type Word } from "words-ui";
+import { createUseStyles } from "react-jss";
+import { Button, CardList, CardTrainer, Header, useLocalStorage, type Word } from "words-ui";
 import { StoreProvider } from "./context";
 import { setPageAction, useStore } from "./services/Store";
 import { Pages } from "./types/Pages";
 
+const useStyles = createUseStyles({
+  "@global": {
+    body: {
+      margin: 0
+    }
+  },
+  app: {
+    display: "flex",
+    flexDirection: "column",
+    height: "100%",
+    minHeight: "100vh",
+    overflow: "hidden",
+  }
+});
+
 const App = () => {
   const [words, setWordsToLocalStorage] = useLocalStorage<Word[]>("WORDS", []);
   const store = useStore({page: "CARD_LIST", words});
+  const classes = useStyles();
   const [state, dispatchToStore] = store;
 
   const onClickCardList = useCallback(() => {
@@ -22,12 +39,19 @@ const App = () => {
   }, [state.words]);
 
   return (
-    <StoreProvider store={store}>
-      <Button onClick={onClickCardList} text="Card list" />
-      <Button onClick={onClickCardTrainer} text="Card trainer" />
-      {state.page === Pages.CardList && <CardList />}
-      {state.page === Pages.CardTrainer && <CardTrainer/>}
-    </StoreProvider>
+    <div className={classes.app}>
+      <StoreProvider store={store}>
+        {state.page === Pages.CardList &&
+          <>
+            <Header>
+              <Button onClick={onClickCardTrainer} text="Card trainer" />
+            </Header>
+            <CardList />
+          </>
+        }
+        {state.page === Pages.CardTrainer && <CardTrainer onCancel={onClickCardList}/>}
+      </StoreProvider>
+    </div>
   );
 };
 

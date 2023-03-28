@@ -1,4 +1,4 @@
-import type { Id } from "./Id";
+import { v4 } from "uuid";
 
 export type Word = {
   backSide: string;
@@ -6,7 +6,12 @@ export type Word = {
   id: string;
 };
 
-export const getDefaultCard = (id: Id): Word => ({backSide: "Privet mir", frontSide: "Hello world", id });
+type WordCreate = Omit<Word, "id">;
+
+export const createWord = ({...wordCreate}: WordCreate): Word => ({
+  id: v4(),
+  ...wordCreate
+});
 
 export const isWord = (word: unknown): word is Word =>
   word !== null &&

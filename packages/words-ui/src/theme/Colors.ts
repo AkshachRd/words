@@ -1,3 +1,3 @@
-export * as Colors from "./Colors";
-
-export const info = "#03a9f4";
+export const Colors = {
+  cardBackground: "#ffc002"
+} as const;

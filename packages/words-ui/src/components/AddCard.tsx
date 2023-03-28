@@ -1,11 +1,13 @@
-import { memo } from "react";
+import { memo, useState } from "react";
 import { createUseStyles } from "react-jss";
+import { createWord, type Word } from "../types";
 import { Card } from "./Card";
+import { CardEditor } from "./CardEditor";
 
 type RuleNames = "addCard";
 
 type AddCardProps = {
-  onClick: () => void;
+  onClick: (word: Word) => void;
 };
 
 const useStyles = createUseStyles<RuleNames>({
@@ -19,14 +21,17 @@ const useStyles = createUseStyles<RuleNames>({
 
 const AddCard = ({onClick}: AddCardProps) => {
   const classes = useStyles();
+  const [isCreating, setIsCreating] = useState(false);
+  const word: Word = createWord({backSide: "", frontSide: ""});
 
-  return (
-    <div className={classes.addCard} onClick={onClick}>
+  return isCreating ?
+    (<CardEditor onCancel={() => setIsCreating(false)} onSubmit={onClick} word={word} />)
+    :
+    (<div className={classes.addCard} onClick={() => setIsCreating(true)}>
       <Card>
         +
       </Card>
-    </div>
-  )
+    </div>)
 };
 
 export default memo(AddCard);
