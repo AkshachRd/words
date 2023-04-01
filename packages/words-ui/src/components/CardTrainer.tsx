@@ -1,19 +1,16 @@
-import { useState } from "react";
+import { useState, type DragEvent } from "react";
 import { createUseStyles } from "react-jss";
 import { useSelectStore } from "../../../words/src/context";
-import { useKeyPress } from "../hooks/useKeyPress";
+import { useKeyPress } from "../hooks";
 import { shuffleArray } from "../services";
 import { getRandomNumber } from "../services/GetRandomNumber";
 import type { Word } from "../types";
 import { FlipCard } from "./FlipCard";
 import { ProgressBar } from "./ProgressBar";
 
-type RuleNames = "cardTrainer" |
-                 "cardTrainerClose" |
-                 "cardTrainerContainer" |
-                 "cardTrainerElement" |
-                 "cardTrainerHeader" |
-                 "cardTrainerProgressBar";
+type RuleNames = "cardTrainer" | "cardTrainerClose" | "cardTrainerContainer" | "cardTrainerDrag" |
+"cardTrainerDragActive" | "cardTrainerElement" | "cardTrainerElementActive" | "cardTrainerHeader" |
+"cardTrainerLeft" | "cardTrainerProgressBar" | "cardTrainerRight";
 
 const centerShift = 50;
 const shuffleShift = 5;
@@ -60,11 +57,25 @@ const useStyles = createUseStyles<RuleNames>({
     position: "relative",
     width: "100%",
   },
+  cardTrainerDrag: {
+    height: "100%",
+    opacity: 0,
+    pointerEvents: "none",
+    position: "absolute",
+    transition: "opacity .3s ease",
+    width: "50%",
+  },
+  cardTrainerDragActive: {
+    opacity: 0.5,
+  },
   cardTrainerElement: {
     left: `${centerShift}%`,
     position: "absolute",
     top: `${centerShift}%`,
     transform: `translate(-50%, calc(-50% - ${headerHeight}))`,
+  },
+  cardTrainerElementActive: {
+    composes: "$cardTrainerElement",
   },
   cardTrainerHeader: {
     alignItems: "center",
@@ -72,8 +83,18 @@ const useStyles = createUseStyles<RuleNames>({
     flex: `0 1 ${headerHeight}`,
     justifyContent: "space-between",
   },
+  cardTrainerLeft: {
+    backgroundColor: "red",
+    composes: "$cardTrainerDrag",
+    left: 0,
+  },
   cardTrainerProgressBar: {
     flex: "0 1 auto",
+  },
+  cardTrainerRight: {
+    backgroundColor: "green",
+    composes: "$cardTrainerDrag",
+    right: 0,
   },
 });
 
@@ -90,6 +111,7 @@ type CardTrainerProps = {
 export const CardTrainer = ({onCancel}: CardTrainerProps) => {
   const [{words}] = useSelectStore();
   const classes = useStyles();
+  const [isDragging, setIsDragging] = useState(false);
 
   const [shuffledWords, setShuffledWords] = useState<BackgroundWord[]>(shuffleArray(words).map((word) => ({
     ...word,
@@ -98,10 +120,13 @@ export const CardTrainer = ({onCancel}: CardTrainerProps) => {
     topShift: getRandomNumber(-shuffleShift, shuffleShift, 0),
   })));
 
-  useKeyPress(["ArrowLeft"], () => {
+  const progress = 100 - shuffledWords.length / words.length * 100;
+
+  const handleWordGood = () => {
     setShuffledWords((state) => state.slice(1));
-  });
-  useKeyPress(["ArrowRight"], () => {
+  };
+
+  const handleWordBad = () => {
     setShuffledWords((state) => {
       const [first] = state;
       if (first === undefined) {
@@ -109,8 +134,27 @@ export const CardTrainer = ({onCancel}: CardTrainerProps) => {
       }
       return [...state.slice(1), first];
     });
-  });
+  };
+
+  useKeyPress(["ArrowLeft"], handleWordBad);
+  useKeyPress(["ArrowRight"], handleWordGood);
   const [firstWord, ...backgroundWords] = shuffledWords;
+
+  const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.currentTarget.classList.add(classes.cardTrainerDragActive);
+  };
+
+  const handleDragLeave = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.currentTarget.classList.remove(classes.cardTrainerDragActive);
+  };
+
+  const handleDrop = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsDragging(false);
+    event.currentTarget.classList.remove(classes.cardTrainerDragActive);
+  };
 
   return (
     <div className={classes.cardTrainer}>
@@ -135,11 +179,33 @@ export const CardTrainer = ({onCancel}: CardTrainerProps) => {
             </div>
           )
         })}
-        {firstWord ? <div className={classes.cardTrainerElement}><FlipCard word={firstWord} /></div> : undefined}
+        {firstWord ?
+        <div
+          className={classes.cardTrainerElementActive}
+          draggable
+          onDragEnd={() => setIsDragging(false)}
+          onDragStart={() => setIsDragging(true)}
+          >
+            <FlipCard word={firstWord}/>
+        </div> : undefined}
       </div>
       <div className={classes.cardTrainerProgressBar}>
-        <ProgressBar completed={100 - shuffledWords.length/words.length*100} />
+        <ProgressBar completed={progress} />
       </div>
+      <div
+        className={classes.cardTrainerLeft}
+        onDragLeave={handleDragLeave}
+        onDragOver={handleDragOver}
+        onDrop={(e) => { handleDrop(e); handleWordBad(); }}
+        style={isDragging ? {pointerEvents: "auto"} : undefined}
+      />
+      <div
+        className={classes.cardTrainerRight}
+        onDragLeave={handleDragLeave}
+        onDragOver={handleDragOver}
+        onDrop={(e) => { handleDrop(e); handleWordGood(); }}
+        style={isDragging ? {pointerEvents: "auto"} : undefined}
+      />
     </div>
   )
 };

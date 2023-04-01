@@ -11,9 +11,10 @@ type RuleNames = "cardList";
 
 const useStyles = createUseStyles<RuleNames>({
   cardList: {
+    alignItems: "center",
     display: "flex",
     flexDirection: "column",
-    gap: 20
+    gap: 20,
   }
 });
 

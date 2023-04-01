@@ -1,7 +1,8 @@
 import { useCallback, useEffect } from "react";
 import { createUseStyles } from "react-jss";
-import { Button, CardList, CardTrainer, Header, useLocalStorage, type Word } from "words-ui";
+import { CardList, CardTrainer, Header } from "words-ui";
 import { StoreProvider } from "./context";
+import { storage } from "./services";
 import { setPageAction, useStore } from "./services/Store";
 import { Pages } from "./types/Pages";
 
@@ -20,9 +21,10 @@ const useStyles = createUseStyles({
   }
 });
 
+const storageKey = "WORDS";
+
 const App = () => {
-  const [words, setWordsToLocalStorage] = useLocalStorage<Word[]>("WORDS", []);
-  const store = useStore({page: "CARD_LIST", words});
+  const store = useStore({page: Pages.CardList, words: storage.get(storageKey, [])});
   const classes = useStyles();
   const [state, dispatchToStore] = store;
 
@@ -35,7 +37,7 @@ const App = () => {
   }, [dispatchToStore]);
 
   useEffect(() => {
-    setWordsToLocalStorage(state.words);
+    storage.set(storageKey, state.words);
   }, [state.words]);
 
   return (
@@ -44,7 +46,7 @@ const App = () => {
         {state.page === Pages.CardList &&
           <>
             <Header>
-              <Button onClick={onClickCardTrainer} text="Card trainer" />
+              <button onClick={onClickCardTrainer} type="button">Card trainer</button>
             </Header>
             <CardList />
           </>
