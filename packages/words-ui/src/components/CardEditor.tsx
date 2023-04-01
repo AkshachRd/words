@@ -9,7 +9,10 @@ type CardEditorProps = {
   word: Word;
 };
 
-// TODO RuleNames
+/*
+ * TODO RuleNames
+ * Используем https://www.react-spring.dev/ для анимации
+ */
 const useStyles = createUseStyles({
   "@keyframes borderSlide": {
     from: {
@@ -19,7 +22,7 @@ const useStyles = createUseStyles({
     to: {
       border: "10px solid black",
       padding: 20,
-    }
+    },
   },
   cardEditor: {
     display: "flex",
@@ -62,7 +65,7 @@ const useStyles = createUseStyles({
   },
 });
 
-export const CardEditor = ({word, onCancel, onSubmit}: CardEditorProps) => {
+export const CardEditor = ({ word, onCancel, onSubmit }: CardEditorProps) => {
   const classes = useStyles();
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -75,12 +78,12 @@ export const CardEditor = ({word, onCancel, onSubmit}: CardEditorProps) => {
     const frontSide = target.frontSide.value;
     const backSide = target.backSide.value;
 
-    onSubmit({...word, backSide, frontSide});
+    onSubmit({ ...word, backSide, frontSide });
     onCancel();
   };
 
   return (
-    <form className={classes.cardEditor}  onSubmit={handleSubmit}>
+    <form className={classes.cardEditor} onSubmit={handleSubmit}>
       <div className={classes.cardEditorContainer}>
         <Card>
           <label>
@@ -106,9 +109,13 @@ export const CardEditor = ({word, onCancel, onSubmit}: CardEditorProps) => {
         </Card>
       </div>
       <div className={classes.cardEditorButtonsContainer}>
-        <button className={classes.cardEditorButton} onClick={onCancel} type="button">Cancel</button>
-        <button className={classes.cardEditorButton} type="submit">Confirm</button>
+        <button className={classes.cardEditorButton} onClick={onCancel} type="button">
+          Cancel
+        </button>
+        <button className={classes.cardEditorButton} type="submit">
+          Confirm
+        </button>
       </div>
     </form>
-  )
+  );
 };

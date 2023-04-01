@@ -14,24 +14,23 @@ const useStyles = createUseStyles<RuleNames>({
   addCard: {
     "&:first-child": {
       backgroundColor: "white",
-      border: "3px black"
-    }
-  }
+      border: "3px black",
+    },
+  },
 });
 
-const AddCard = ({onClick}: AddCardProps) => {
+const AddCardComponent = ({ onClick }: AddCardProps) => {
   const classes = useStyles();
   const [isCreating, setIsCreating] = useState(false);
-  const word: Word = createWord({backSide: "", frontSide: ""});
+  const word: Word = createWord({ backSide: "", frontSide: "" });
 
-  return isCreating ?
-    (<CardEditor onCancel={() => setIsCreating(false)} onSubmit={onClick} word={word} />)
-    :
-    (<div className={classes.addCard} onClick={() => setIsCreating(true)}>
-      <Card>
-        +
-      </Card>
-    </div>)
+  return isCreating ? (
+    <CardEditor onCancel={() => setIsCreating(false)} onSubmit={onClick} word={word} />
+  ) : (
+    <div className={classes.addCard} onClick={() => setIsCreating(true)}>
+      <Card>+</Card>
+    </div>
+  );
 };
 
-export default memo(AddCard);
+export const AddCard = memo(AddCardComponent);

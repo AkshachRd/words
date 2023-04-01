@@ -3,7 +3,13 @@ import { createUseStyles } from "react-jss";
 import type { Word } from "../types";
 import { Card } from "./Card";
 
-type RuleNames = "flipCard" | "flipCardBack" | "flipCardButton" | "flipCardButtonsContainer" | "flipCardContainer" | "flipCardFront";
+type RuleNames =
+  | "flipCard"
+  | "flipCardBack"
+  | "flipCardButton"
+  | "flipCardButtonsContainer"
+  | "flipCardContainer"
+  | "flipCardFront";
 
 type FlipCardProps = {
   disabled?: boolean;
@@ -14,7 +20,10 @@ type FlipCardProps = {
   word: Word;
 };
 
-// TODO Constants?
+/*
+ * TODO Constants?
+ * Оставляем константы в файле, где они используются
+ */
 const rotateX0 = "rotateX(0deg)";
 const rotateX180 = "rotateX(180deg)";
 
@@ -69,7 +78,7 @@ const useStyles = createUseStyles<RuleNames>({
   },
   flipCardFront: {
     backfaceVisibility: "hidden",
-    WebkitBackfaceVisibility: "hidden", // TODO CSS logic
+    // WebkitBackfaceVisibility: "hidden", // TODO CSS logic
     height: "100%",
     left: 0,
     position: "absolute",
@@ -86,11 +95,11 @@ export const FlipCard = ({ word, onDelete, onEdit, opacity, rotation, disabled }
   const onClick = () => setIsRotated(state => !state);
 
   const flipCardFrontStyles: CSSProperties = {
-    transform: isRotated ? rotateX180 : rotateX0
+    transform: isRotated ? rotateX180 : rotateX0,
   };
 
   const flipCardBackStyles: CSSProperties = {
-    transform: isRotated ? rotateX0 : rotateX180
+    transform: isRotated ? rotateX0 : rotateX180,
   };
 
   return (
@@ -104,15 +113,20 @@ export const FlipCard = ({ word, onDelete, onEdit, opacity, rotation, disabled }
         <div className={classes.flipCardBack} style={flipCardBackStyles}>
           <Card>{word.backSide}</Card>
         </div>
-        {(disabled === undefined || !disabled) ?
+        {disabled === undefined || !disabled ? (
           <div className={classes.flipCardButtonsContainer}>
-            {onDelete ?
-            <button className={classes.flipCardButton} onClick={onDelete} type="button">Delete</button>
-            : undefined}
-            {onEdit ?
-            <button className={classes.flipCardButton} onClick={onEdit} type="button">Edit</button>
-            : undefined}
-          </div> : undefined}
+            {onDelete ? (
+              <button className={classes.flipCardButton} onClick={onDelete} type="button">
+                Delete
+              </button>
+            ) : undefined}
+            {onEdit ? (
+              <button className={classes.flipCardButton} onClick={onEdit} type="button">
+                Edit
+              </button>
+            ) : undefined}
+          </div>
+        ) : undefined}
       </div>
     </div>
   );
