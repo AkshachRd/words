@@ -20,20 +20,17 @@ type FlipCardProps = {
   word: Word;
 };
 
-/*
- * TODO Constants?
- * Оставляем константы в файле, где они используются
- */
 const rotateX0 = "rotateX(0deg)";
 const rotateX180 = "rotateX(180deg)";
 
-const useStyles = createUseStyles<RuleNames>({
-  flipCard: {
+const useStyles = createUseStyles<RuleNames, FlipCardProps>({
+  flipCard: ({ disabled }) => ({
     backgroundColor: "transparent",
     height: 350,
     perspective: 1000,
+    userSelect: disabled === undefined || !disabled ? "auto" : "none",
     width: 500,
-  },
+  }),
   flipCardBack: {
     WebkitBackfaceVisibility: "hidden",
     backfaceVisibility: "hidden",
@@ -78,7 +75,6 @@ const useStyles = createUseStyles<RuleNames>({
   },
   flipCardFront: {
     backfaceVisibility: "hidden",
-    // WebkitBackfaceVisibility: "hidden", // TODO CSS logic
     height: "100%",
     left: 0,
     position: "absolute",
@@ -89,9 +85,10 @@ const useStyles = createUseStyles<RuleNames>({
   },
 });
 
-export const FlipCard = ({ word, onDelete, onEdit, opacity, rotation, disabled }: FlipCardProps) => {
+export const FlipCard = (props: FlipCardProps) => {
+  const { word, onDelete, onEdit, opacity, rotation, disabled } = props;
   const [isRotated, setIsRotated] = useState(false);
-  const classes = useStyles();
+  const classes = useStyles(props);
   const onClick = () => setIsRotated(state => !state);
 
   const flipCardFrontStyles: CSSProperties = {

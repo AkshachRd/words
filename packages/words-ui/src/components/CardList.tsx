@@ -7,9 +7,7 @@ import { AddCard } from "./AddCard";
 import { CardEditor } from "./CardEditor";
 import { FlipCard } from "./FlipCard";
 
-type RuleNames = "cardList";
-
-const useStyles = createUseStyles<RuleNames>({
+const useStyles = createUseStyles({
   cardList: {
     alignItems: "center",
     display: "flex",
@@ -21,10 +19,6 @@ const useStyles = createUseStyles<RuleNames>({
 export const CardList = () => {
   const classes = useStyles();
   const [state, dispatch] = useSelectStore();
-  /*
-   * TODO null
-   * https://github.com/sindresorhus/eslint-plugin-unicorn/blob/v45.0.2/docs/rules/no-null.md
-   */
   const [editingCardId, setEditingCardId] = useState<Id | undefined>();
 
   const addCard = (word: Word) => {

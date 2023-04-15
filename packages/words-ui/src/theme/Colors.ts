@@ -1,3 +1,5 @@
 export const Colors = {
-  cardBackground: "#ffc002"
+  Background: "white",
+  Error: "#fb6c55",
+  Primary: "#ffc002",
 } as const;

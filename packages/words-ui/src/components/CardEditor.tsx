@@ -1,3 +1,4 @@
+import { animated, useSpring } from "@react-spring/web";
 import type { FormEvent } from "react";
 import { createUseStyles } from "react-jss";
 import type { Word } from "../types";
@@ -9,21 +10,7 @@ type CardEditorProps = {
   word: Word;
 };
 
-/*
- * TODO RuleNames
- * Используем https://www.react-spring.dev/ для анимации
- */
 const useStyles = createUseStyles({
-  "@keyframes borderSlide": {
-    from: {
-      border: "0 solid black",
-      padding: 0,
-    },
-    to: {
-      border: "10px solid black",
-      padding: 20,
-    },
-  },
   cardEditor: {
     display: "flex",
     flexDirection: "column",
@@ -41,9 +28,9 @@ const useStyles = createUseStyles({
     flexDirection: "row",
   },
   cardEditorContainer: {
-    animation: ".3s ease-out 0s 1 $borderSlide",
-    border: "10px solid black",
+    borderColor: "black",
     borderRadius: 40,
+    borderStyle: "solid",
     display: "flex",
     flexDirection: "column",
     gap: 20,
@@ -68,6 +55,17 @@ const useStyles = createUseStyles({
 export const CardEditor = ({ word, onCancel, onSubmit }: CardEditorProps) => {
   const classes = useStyles();
 
+  const springs = useSpring({
+    from: {
+      borderWidth: 0,
+      padding: 0,
+    },
+    to: {
+      borderWidth: 10,
+      padding: 20,
+    },
+  });
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const target = event.target as typeof event.target & {
@@ -84,7 +82,7 @@ export const CardEditor = ({ word, onCancel, onSubmit }: CardEditorProps) => {
 
   return (
     <form className={classes.cardEditor} onSubmit={handleSubmit}>
-      <div className={classes.cardEditorContainer}>
+      <animated.div className={classes.cardEditorContainer} style={springs}>
         <Card>
           <label>
             <input
@@ -107,7 +105,7 @@ export const CardEditor = ({ word, onCancel, onSubmit }: CardEditorProps) => {
             />
           </label>
         </Card>
-      </div>
+      </animated.div>
       <div className={classes.cardEditorButtonsContainer}>
         <button className={classes.cardEditorButton} onClick={onCancel} type="button">
           Cancel

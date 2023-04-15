@@ -26,7 +26,6 @@ export const useKeyPress = (keys: string[], callback: (event: KeyboardEvent) => 
     const targetNode = node ?? document;
     targetNode.addEventListener("keydown", handleKeyPress);
 
-    return () =>
-      targetNode.removeEventListener("keydown", handleKeyPress);
+    return () => targetNode.removeEventListener("keydown", handleKeyPress);
   }, [handleKeyPress, node]);
 };

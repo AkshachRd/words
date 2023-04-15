@@ -12,7 +12,7 @@ const useStyles = createUseStyles<RuleNames, ProgressBarProps>({
     height: 10,
     width: "100%",
   },
-  progressBarFiller: ({completed}) => ({
+  progressBarFiller: ({ completed }) => ({
     backgroundColor: "#36c93c",
     height: "100%",
     transition: "width 1s ease-out",
@@ -22,7 +22,7 @@ const useStyles = createUseStyles<RuleNames, ProgressBarProps>({
     color: "white",
     fontWeight: "bold",
     padding: 5,
-  }
+  },
 });
 
 export const ProgressBar = (props: ProgressBarProps) => {
@@ -34,5 +34,5 @@ export const ProgressBar = (props: ProgressBarProps) => {
         <span className={classes.progressBarLabel} />
       </div>
     </div>
-  )
+  );
 };

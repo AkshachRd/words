@@ -9,8 +9,8 @@ import { Pages } from "./types/Pages";
 const useStyles = createUseStyles({
   "@global": {
     body: {
-      margin: 0
-    }
+      margin: 0,
+    },
   },
   app: {
     display: "flex",
@@ -18,13 +18,13 @@ const useStyles = createUseStyles({
     height: "100%",
     minHeight: "100vh",
     overflow: "hidden",
-  }
+  },
 });
 
 const storageKey = "WORDS";
 
 const App = () => {
-  const store = useStore({page: Pages.CardList, words: storage.get(storageKey, [])});
+  const store = useStore({ page: Pages.CardList, words: storage.get(storageKey, []) });
   const classes = useStyles();
   const [state, dispatchToStore] = store;
 
@@ -43,15 +43,21 @@ const App = () => {
   return (
     <div className={classes.app}>
       <StoreProvider store={store}>
-        {state.page === Pages.CardList &&
-          <>
-            <Header>
-              <button onClick={onClickCardTrainer} type="button">Card trainer</button>
-            </Header>
-            <CardList />
-          </>
+        {
+          {
+            [Pages.CardList]: (
+              <>
+                <Header>
+                  <button onClick={onClickCardTrainer} type="button">
+                    Card trainer
+                  </button>
+                </Header>
+                <CardList />
+              </>
+            ),
+            [Pages.CardTrainer]: <CardTrainer />,
+          }[state.page]
         }
-        {state.page === Pages.CardTrainer && <CardTrainer onCancel={onClickCardList}/>}
       </StoreProvider>
     </div>
   );

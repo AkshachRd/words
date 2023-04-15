@@ -4,13 +4,11 @@ import { createWord, type Word } from "../types";
 import { Card } from "./Card";
 import { CardEditor } from "./CardEditor";
 
-type RuleNames = "addCard";
-
 type AddCardProps = {
   onClick: (word: Word) => void;
 };
 
-const useStyles = createUseStyles<RuleNames>({
+const useStyles = createUseStyles({
   addCard: {
     "&:first-child": {
       backgroundColor: "white",

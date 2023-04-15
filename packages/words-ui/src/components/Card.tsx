@@ -13,7 +13,7 @@ type CardProps = {
 const useStyles = createUseStyles<RuleNames, CardProps>({
   card: ({ rotation, opacity }) => ({
     alignItems: "center",
-    backgroundColor: Colors.cardBackground,
+    backgroundColor: Colors.Primary,
     borderRadius: 40,
     color: "white",
     display: "flex",
@@ -30,8 +30,5 @@ const useStyles = createUseStyles<RuleNames, CardProps>({
 export const Card = ({ children, ...props }: CardProps) => {
   const classes = useStyles(props);
 
-  return (
-    <div className={classes.card}>
-      {children}
-    </div>);
+  return <div className={classes.card}>{children}</div>;
 };
