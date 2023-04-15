@@ -125,10 +125,13 @@ export const WritingTrainer = ({ words }: WritingTrainerProps) => {
       return;
     }
 
-    setDirection(-1);
-    setIndex(state => (state + 1) % words.length);
-    setValue("");
-    api.start({ to: { borderColor: "green" } });
+    api.start({ to: { borderColor: Colors.Success } });
+    setTimeout(() => {
+      setDirection(-1);
+      setIndex(state => (state + 1) % words.length);
+      setValue("");
+      api.start({ to: { borderColor: Colors.Primary } });
+    }, 500);
   };
 
   const setPreviousCard = () => {
