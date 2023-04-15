@@ -3,14 +3,6 @@ import { createUseStyles } from "react-jss";
 import type { Word } from "../types";
 import { Card } from "./Card";
 
-type RuleNames =
-  | "flipCard"
-  | "flipCardBack"
-  | "flipCardButton"
-  | "flipCardButtonsContainer"
-  | "flipCardContainer"
-  | "flipCardFront";
-
 type FlipCardProps = {
   disabled?: boolean;
   onDelete?: () => void;
@@ -23,8 +15,8 @@ type FlipCardProps = {
 const rotateX0 = "rotateX(0deg)";
 const rotateX180 = "rotateX(180deg)";
 
-const useStyles = createUseStyles<RuleNames, FlipCardProps>({
-  flipCard: ({ disabled }) => ({
+const useStyles = createUseStyles({
+  flipCard: ({ disabled }: FlipCardProps) => ({
     backgroundColor: "transparent",
     height: 350,
     perspective: 1000,

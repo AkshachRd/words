@@ -1,18 +1,16 @@
 import { createUseStyles } from "react-jss";
 
-type RuleNames = "progressBar" | "progressBarFiller" | "progressBarLabel";
-
 type ProgressBarProps = {
   completed: number;
 };
 
-const useStyles = createUseStyles<RuleNames, ProgressBarProps>({
+const useStyles = createUseStyles({
   progressBar: {
     backgroundColor: "transparent",
     height: 10,
     width: "100%",
   },
-  progressBarFiller: ({ completed }) => ({
+  progressBarFiller: ({ completed }: ProgressBarProps) => ({
     backgroundColor: "#36c93c",
     height: "100%",
     transition: "width 1s ease-out",

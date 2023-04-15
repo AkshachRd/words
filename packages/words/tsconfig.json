@@ -5,6 +5,8 @@
     "../words-ui/src/components/Card.tsx",
     "../words-ui/src/hooks",
     "../words-ui/src/types",
-    "../words-ui/src/components/CardEditor.tsx"
+    "../words-ui/src/components/CardEditor.tsx",
+    "../words-ui/src/components/WritingTrainer.tsx",
+    "../words-ui/src/components/AddCard.tsx"
   ]
 }

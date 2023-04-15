@@ -1,5 +1,5 @@
-import { WritingTrainer } from "../../../words/src/components/WritingTrainer";
-import { useSelectStore } from "../../../words/src/context";
+import { WritingTrainer } from "words-ui";
+import { useSelectStore } from "../context";
 import { shuffleArray } from "../services";
 
 export const CardTrainer = () => {

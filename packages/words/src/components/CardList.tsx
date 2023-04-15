@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { createUseStyles } from "react-jss";
-import { AddCard } from "words-ui/src/components/AddCard";
-import { CardEditor } from "words-ui/src/components/CardEditor";
-import { FlipCard } from "words-ui/src/components/FlipCard";
+import { AddCard, CardEditor, FlipCard } from "words-ui";
 import type { Id, Word } from "words-ui/src/types";
 import { useSelectStore } from "../context";
 import { addCardAction, deleteCardAction, editCardAction } from "../services/Store";
