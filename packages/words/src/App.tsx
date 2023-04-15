@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { createUseStyles } from "react-jss";
-import { CardList, CardTrainer, Header } from "words-ui";
+import { CardTrainer, Header } from "words-ui";
+import { CardList } from "./components";
 import { StoreProvider } from "./context";
 import { storage } from "./services";
 import { setPageAction, useStore } from "./services/Store";

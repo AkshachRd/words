@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { createUseStyles } from "react-jss";
-import { useSelectStore } from "../../../words/src/context";
-import { addCardAction, deleteCardAction, editCardAction } from "../../../words/src/services/Store";
-import type { Id, Word } from "../types";
-import { AddCard } from "./AddCard";
-import { CardEditor } from "./CardEditor";
-import { FlipCard } from "./FlipCard";
+import { AddCard } from "words-ui/src/components/AddCard";
+import { CardEditor } from "words-ui/src/components/CardEditor";
+import { FlipCard } from "words-ui/src/components/FlipCard";
+import type { Id, Word } from "words-ui/src/types";
+import { useSelectStore } from "../context";
+import { addCardAction, deleteCardAction, editCardAction } from "../services/Store";
 
 const useStyles = createUseStyles({
   cardList: {

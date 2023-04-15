@@ -1,9 +1,9 @@
 import { animated, useSpring, useTransition } from "@react-spring/web";
 import { useRef, useState } from "react";
 import { createUseStyles } from "react-jss";
-import { Colors } from "../theme";
-import type { Word } from "../types";
-import { FlipCard } from "./FlipCard";
+import { FlipCard } from "words-ui/src/components/FlipCard";
+import { Colors } from "words-ui/src/theme";
+import type { Word } from "words-ui/src/types";
 
 type WritingTrainerProps = {
   words: Word[];
