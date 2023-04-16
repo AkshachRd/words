@@ -2,7 +2,9 @@ import { animated, useSpring, useTransition } from "@react-spring/web";
 import { useRef, useState } from "react";
 import { createUseStyles } from "react-jss";
 import type { Word } from "words-ui/src/types";
+import { useKeyPress } from "../hooks";
 import { Colors } from "../theme";
+import { DirectionButton } from "./DirectionButton";
 import { FlipCard } from "./FlipCard";
 
 type WritingTrainerProps = {
@@ -91,48 +93,11 @@ export const WritingTrainer = ({ words }: WritingTrainerProps) => {
     },
     enter: { x: 0 },
     exitBeforeEnter: true,
-    from: { x: window.innerWidth },
+    from: { x: window.innerWidth * direction * -1 },
     leave: { x: window.innerWidth * direction },
   });
 
   const valueSample = currentWord?.backSide;
-
-  const handleTraining = () => {
-    if (valueSample === undefined) return;
-    const chars = [...value];
-    let wasError = false;
-
-    if (valueSample.length !== value.length) {
-      wasError = true;
-    }
-
-    const newValue = chars
-      .map((char, index) => {
-        if (char !== valueSample[index]) {
-          wasError = true;
-
-          return `<span class=${classes.writingTrainerContentWrongAnswerHighlight}>${char}</span>`;
-        }
-        return char;
-      })
-      .join("");
-
-    if (!contentRef.current) throw new Error("contentRef is not assigned");
-    contentRef.current.innerHTML = newValue;
-    if (wasError) {
-      api.start({ borderColor: Colors.Error, y: y.get() === 1 ? 0 : 1 });
-
-      return;
-    }
-
-    api.start({ to: { borderColor: Colors.Success } });
-    setTimeout(() => {
-      setDirection(-1);
-      setIndex(state => (state + 1) % words.length);
-      setValue("");
-      api.start({ to: { borderColor: Colors.Primary } });
-    }, 500);
-  };
 
   const setPreviousCard = () => {
     setDirection(1);
@@ -142,18 +107,55 @@ export const WritingTrainer = ({ words }: WritingTrainerProps) => {
       }
       return (state - 1) % words.length;
     });
+    setValue("");
+    api.start({ to: { borderColor: Colors.Primary } });
   };
+  useKeyPress(["ArrowLeft"], setPreviousCard);
 
   const setNextCard = () => {
     setDirection(-1);
     setIndex(state => (state + 1) % words.length);
+    setValue("");
+    api.start({ to: { borderColor: Colors.Primary } });
+  };
+  useKeyPress(["ArrowRight"], setNextCard);
+
+  const handleTraining = () => {
+    if (valueSample === undefined) return;
+    const valueCheck = valueSample.toLowerCase();
+    const chars = [...value.toLowerCase()];
+    let wasError = false;
+
+    if (valueCheck.length !== value.length) {
+      wasError = true;
+    }
+
+    const newValue = chars
+      .map((char, index) => {
+        if (char !== valueCheck[index]) {
+          wasError = true;
+
+          return `<span class=${classes.writingTrainerContentWrongAnswerHighlight}>${value[index]}</span>`;
+        }
+        return value[index];
+      })
+      .join("");
+
+    if (wasError) {
+      api.start({ borderColor: Colors.Error, y: y.get() === 1 ? 0 : 1 });
+      if (!contentRef.current) throw new Error("contentRef is not assigned");
+      contentRef.current.innerHTML = newValue;
+
+      return;
+    }
+
+    api.start({ to: { borderColor: Colors.Success } });
+    setTimeout(setNextCard, 500);
   };
 
   return (
     <div className={classes.writingTrainer}>
-      <button onClick={setPreviousCard} type="button">
-        {"<-"}
-      </button>
+      <DirectionButton direction="left" onClick={setPreviousCard} />
       {currentWord === undefined ? (
         <p>Congratulations!</p>
       ) : (
@@ -191,9 +193,7 @@ export const WritingTrainer = ({ words }: WritingTrainerProps) => {
           </animated.div>
         ))
       )}
-      <button onClick={setNextCard} type="button">
-        {"->"}
-      </button>
+      <DirectionButton direction="right" onClick={setNextCard} />
     </div>
   );
 };
