@@ -1,6 +1,8 @@
 import { useState, type CSSProperties } from "react";
 import { createUseStyles } from "react-jss";
+import { Colors } from "../theme";
 import type { Word } from "../types";
+import { Button } from "./Button";
 import { Card } from "./Card";
 
 type FlipCardProps = {
@@ -35,11 +37,6 @@ const useStyles = createUseStyles({
     width: "100%",
   },
   flipCardButton: {
-    appearance: "none",
-    backgroundColor: "white",
-    border: "1px solid black",
-    borderRadius: 40,
-    cursor: "pointer",
     left: "5%",
     position: "absolute",
     top: "5%",
@@ -105,14 +102,18 @@ export const FlipCard = (props: FlipCardProps) => {
         {disabled === undefined || !disabled ? (
           <div className={classes.flipCardButtonsContainer}>
             {onDelete ? (
-              <button className={classes.flipCardButton} onClick={onDelete} type="button">
-                Delete
-              </button>
+              <div className={classes.flipCardButton}>
+                <Button background={Colors.Background} onClick={onDelete}>
+                  Delete
+                </Button>
+              </div>
             ) : undefined}
             {onEdit ? (
-              <button className={classes.flipCardButton} onClick={onEdit} type="button">
-                Edit
-              </button>
+              <div className={classes.flipCardButton}>
+                <Button background={Colors.Background} onClick={onEdit}>
+                  Edit
+                </Button>
+              </div>
             ) : undefined}
           </div>
         ) : undefined}

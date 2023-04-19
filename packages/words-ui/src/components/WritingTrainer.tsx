@@ -2,8 +2,9 @@ import { animated, useSpring, useTransition } from "@react-spring/web";
 import { useRef, useState } from "react";
 import { createUseStyles } from "react-jss";
 import type { Word } from "words-ui/src/types";
-import { useKeyPress } from "../hooks";
-import { Colors } from "../theme";
+import { useIteration, useKeyPress } from "../hooks";
+import { Colors, FontFamily, FontSize } from "../theme";
+import { Button } from "./Button";
 import { DirectionButton } from "./DirectionButton";
 import { FlipCard } from "./FlipCard";
 
@@ -18,6 +19,7 @@ const useStyles = createUseStyles({
     flexDirection: "row",
     justifyContent: "space-between",
     minHeight: "inherit",
+    position: "relative",
   },
   writingTrainerContainer: {
     alignItems: "center",
@@ -41,7 +43,9 @@ const useStyles = createUseStyles({
     border: "none",
     caretColor: "black",
     color: "transparent",
-    fontSize: "inherit",
+    fontFamily: FontFamily.Primary,
+    fontSize: FontSize.Big,
+    padding: 0,
     width: "100%",
   },
   writingTrainerInputContainer: {
@@ -51,10 +55,20 @@ const useStyles = createUseStyles({
     width: "100%",
   },
   writingTrainerInputContent: {
+    fontFamily: FontFamily.Primary,
+    fontSize: FontSize.Big,
     left: 0,
+    overflow: "hidden",
+    pointerEvents: "none",
     position: "absolute",
+    textOverflow: "clip",
+    top: "50%",
+    transform: "translateY(-50%)",
+    whiteSpace: "nowrap",
+    width: "100%",
   },
   writingTrainerInputWrapper: {
+    display: "flex",
     position: "relative",
     width: "100%",
   },
@@ -65,26 +79,28 @@ const useStyles = createUseStyles({
   },
 });
 
+const writingTrainerUnderlineAnimation = {
+  config: {
+    friction: 10,
+    mass: 1,
+    tension: 1000,
+  },
+  from: {
+    borderColor: `${Colors.Primary}`,
+    y: 0,
+  },
+};
+
 // eslint-disable-next-line max-lines-per-function
 export const WritingTrainer = ({ words }: WritingTrainerProps) => {
   const classes = useStyles();
   const contentRef = useRef<HTMLSpanElement>(null);
-  const [index, setIndex] = useState(0);
-  const [direction, setDirection] = useState<-1 | 1>(1);
-  const currentWord = words[index];
+  const [index, { getNextIter, getPreviousIter }] = useIteration(words);
+  const [isGoneIndexes, setIsGoneIndexes] = useState<number[]>([]);
+  const [direction, setDirection] = useState<-1 | 1>(-1);
+  const currentWord = index === undefined ? undefined : words[index];
   const [value, setValue] = useState<string>("");
-
-  const [{ y, borderColor }, api] = useSpring(() => ({
-    config: {
-      friction: 10,
-      mass: 1,
-      tension: 1000,
-    },
-    from: {
-      borderColor: `${Colors.Primary}`,
-      y: 0,
-    },
-  }));
+  const [{ y, borderColor }, api] = useSpring(() => writingTrainerUnderlineAnimation);
 
   const transitions = useTransition(index, {
     config: {
@@ -99,26 +115,21 @@ export const WritingTrainer = ({ words }: WritingTrainerProps) => {
 
   const valueSample = currentWord?.backSide;
 
-  const setPreviousCard = () => {
+  const setPreviousCard = (isGone: number[] = []) => {
     setDirection(1);
-    setIndex(state => {
-      if (state === 0) {
-        return words.length - 1;
-      }
-      return (state - 1) % words.length;
-    });
+    getPreviousIter(isGone);
     setValue("");
     api.start({ to: { borderColor: Colors.Primary } });
   };
-  useKeyPress(["ArrowLeft"], setPreviousCard);
+  useKeyPress(["ArrowLeft"], () => setPreviousCard(isGoneIndexes));
 
-  const setNextCard = () => {
+  const setNextCard = (isGone: number[] = []) => {
     setDirection(-1);
-    setIndex(state => (state + 1) % words.length);
+    getNextIter(isGone);
     setValue("");
     api.start({ to: { borderColor: Colors.Primary } });
   };
-  useKeyPress(["ArrowRight"], setNextCard);
+  useKeyPress(["ArrowRight"], () => setNextCard(isGoneIndexes));
 
   const handleTraining = () => {
     if (valueSample === undefined) return;
@@ -149,13 +160,16 @@ export const WritingTrainer = ({ words }: WritingTrainerProps) => {
       return;
     }
 
+    index !== undefined && setIsGoneIndexes(state => [...state, index]);
     api.start({ to: { borderColor: Colors.Success } });
-    setTimeout(setNextCard, 500);
+    setTimeout(() => {
+      index !== undefined && setNextCard([...isGoneIndexes, index]);
+    }, 500);
   };
 
   return (
     <div className={classes.writingTrainer}>
-      <DirectionButton direction="left" onClick={setPreviousCard} />
+      <DirectionButton direction="left" onClick={() => setPreviousCard(isGoneIndexes)} />
       {currentWord === undefined ? (
         <p>Congratulations!</p>
       ) : (
@@ -174,9 +188,9 @@ export const WritingTrainer = ({ words }: WritingTrainerProps) => {
                   {value}
                 </span>
               </div>
-              <button onClick={handleTraining} type="button">
+              <Button background={Colors.Primary} onClick={handleTraining}>
                 Check
-              </button>
+              </Button>
             </div>
             <animated.span
               className={classes.writingTrainerUnderline}
@@ -193,7 +207,7 @@ export const WritingTrainer = ({ words }: WritingTrainerProps) => {
           </animated.div>
         ))
       )}
-      <DirectionButton direction="right" onClick={setNextCard} />
+      <DirectionButton direction="right" onClick={() => setNextCard(isGoneIndexes)} />
     </div>
   );
 };

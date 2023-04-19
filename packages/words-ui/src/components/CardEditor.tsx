@@ -1,7 +1,9 @@
 import { animated, useSpring } from "@react-spring/web";
-import type { FormEvent } from "react";
+import { useState } from "react";
 import { createUseStyles } from "react-jss";
+import { Colors } from "../theme";
 import type { Word } from "../types";
+import { Button } from "./Button";
 import { Card } from "./Card";
 
 type CardEditorProps = {
@@ -14,18 +16,14 @@ const useStyles = createUseStyles({
   cardEditor: {
     display: "flex",
     flexDirection: "column",
+    gap: 10,
     height: "fit-content",
     width: "fit-content",
-  },
-  cardEditorButton: {
-    MozAppearance: "none",
-    WebkitAppearance: "none",
-    appearance: "none",
-    backgroundColor: "white",
   },
   cardEditorButtonsContainer: {
     display: "flex",
     flexDirection: "row",
+    justifyContent: "space-evenly",
   },
   cardEditorContainer: {
     borderColor: "black",
@@ -52,29 +50,23 @@ const useStyles = createUseStyles({
   },
 });
 
+const buttonWidth = 100;
+const buttonHeight = 40;
+
 export const CardEditor = ({ word, onCancel, onSubmit }: CardEditorProps) => {
   const classes = useStyles();
+  const [frontSide, setFrontSide] = useState<string>("");
+  const [backSide, setBackSide] = useState<string>("");
 
   const springs = useSpring({
-    from: {
-      borderWidth: 0,
-      padding: 0,
-    },
-    to: {
-      borderWidth: 10,
-      padding: 20,
-    },
+    from: { borderWidth: 0, padding: 0 },
+    to: { borderWidth: 10, padding: 20 },
   });
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const target = event.target as typeof event.target & {
-      backSide: { value: string };
-      frontSide: { value: string };
-    };
-
-    const frontSide = target.frontSide.value;
-    const backSide = target.backSide.value;
+  const handleSubmit = () => {
+    if (frontSide !== "" && backSide !== "") {
+      onSubmit({ ...word, backSide, frontSide });
+    }
 
     onSubmit({ ...word, backSide, frontSide });
     onCancel();
@@ -89,6 +81,7 @@ export const CardEditor = ({ word, onCancel, onSubmit }: CardEditorProps) => {
               className={classes.cardEditorInput}
               defaultValue={word.frontSide}
               name="frontSide"
+              onChange={event => setFrontSide(event.target.value)}
               placeholder="Front side"
               type="text"
             />
@@ -100,6 +93,7 @@ export const CardEditor = ({ word, onCancel, onSubmit }: CardEditorProps) => {
               className={classes.cardEditorInput}
               defaultValue={word.backSide}
               name="backSide"
+              onChange={event => setBackSide(event.target.value)}
               placeholder="Back side"
               type="text"
             />
@@ -107,12 +101,12 @@ export const CardEditor = ({ word, onCancel, onSubmit }: CardEditorProps) => {
         </Card>
       </animated.div>
       <div className={classes.cardEditorButtonsContainer}>
-        <button className={classes.cardEditorButton} onClick={onCancel} type="button">
+        <Button background={Colors.Background} height={buttonHeight} onClick={onCancel} width={buttonWidth}>
           Cancel
-        </button>
-        <button className={classes.cardEditorButton} type="submit">
+        </Button>
+        <Button background={Colors.Background} height={buttonHeight} onClick={handleSubmit} width={buttonWidth}>
           Confirm
-        </button>
+        </Button>
       </div>
     </form>
   );

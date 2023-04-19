@@ -7,6 +7,7 @@
     "../words-ui/src/types",
     "../words-ui/src/components/CardEditor.tsx",
     "../words-ui/src/components/WritingTrainer.tsx",
-    "../words-ui/src/components/AddCard.tsx"
+    "../words-ui/src/components/AddCard.tsx",
+    "../words-ui/src/components/TrainingMenu.tsx"
   ]
 }
